@@ -1,0 +1,22 @@
+{
+  "name": "survey-builder-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "shared",
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "build": "npm run build --workspace=shared && npm run build --workspace=backend",
+    "test": "npm run test --workspace=shared && npm run test --workspace=backend",
+    "lint": "npm run lint --workspaces --if-present",
+    "dev:backend": "npm run dev --workspace=backend",
+    "seed:admin": "npm run seed:admin --workspace=backend",
+    "seed": "npm run seed --workspace=backend"
+  },
+  "devDependencies": {
+    "prettier": "^3.3.3",
+    "typescript": "^5.6.3"
+  }
+}
