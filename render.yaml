@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: survey-builder-api
+    env: node
+    plan: free
+    buildCommand: npm install && npm run build --workspace=shared && npm run build --workspace=backend
+    startCommand: node backend/dist/server.js
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 12h
+      - key: CORS_ORIGIN
+        sync: false
+      - key: IP_SALT
+        generateValue: true
+      - key: SPAM_PROTECTION_ENABLED
+        value: false
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
