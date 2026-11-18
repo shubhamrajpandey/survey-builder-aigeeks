@@ -103,8 +103,10 @@ export async function getPaginatedResponses(
   page = 1,
   limit = 20
 ) {
-  const pageNum = Math.max(1, page);
-  const limitNum = Math.min(100, Math.max(1, limit));
+  const parsedPage = Number(page);
+  const parsedLimit = Number(limit);
+  const pageNum = Number.isInteger(parsedPage) && parsedPage > 0 ? parsedPage : 1;
+  const limitNum = Number.isInteger(parsedLimit) && parsedLimit > 0 ? Math.min(100, parsedLimit) : 20;
   const skip = (pageNum - 1) * limitNum;
 
   const [responses, total] = await Promise.all([

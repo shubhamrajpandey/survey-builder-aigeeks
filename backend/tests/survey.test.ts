@@ -118,7 +118,7 @@ describe('Survey Admin API (/api/v1/surveys)', () => {
 
     expect(listRes.status).toBe(200);
     expect(Array.isArray(listRes.body.surveys)).toBe(true);
-    const item = listRes.body.surveys.find((s: any) => s.survey.rootId === rootId);
+    const item = listRes.body.surveys.find((s: { survey: { rootId: string } }) => s.survey.rootId === rootId);
     expect(item).toBeDefined();
     expect(item.responseCount).toBe(1);
   });

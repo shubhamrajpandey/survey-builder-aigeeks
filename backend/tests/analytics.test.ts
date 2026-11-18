@@ -109,7 +109,7 @@ describe('Analytics & Responses API', () => {
     expect(res.body.version).toBe(1);
 
     // 1. Single Choice analytics
-    const choiceQ = res.body.questions.find((q: any) => q.questionId === 'q_choice');
+    const choiceQ = res.body.questions.find((q: { questionId: string }) => q.questionId === 'q_choice');
     expect(choiceQ.answered).toBe(4);
     expect(choiceQ.counts).toEqual([
       { option: 'Web', count: 2 },
@@ -117,7 +117,7 @@ describe('Analytics & Responses API', () => {
     ]);
 
     // 2. Rating analytics: ratings = 5, 4, 3, 4 -> sum=16 / 4 = 4.0
-    const ratingQ = res.body.questions.find((q: any) => q.questionId === 'q_rate');
+    const ratingQ = res.body.questions.find((q: { questionId: string }) => q.questionId === 'q_rate');
     expect(ratingQ.answered).toBe(4);
     expect(ratingQ.average).toBe(4);
     expect(ratingQ.distribution).toEqual({
@@ -130,7 +130,7 @@ describe('Analytics & Responses API', () => {
 
     // 3. Checkbox analytics:
     // Analytics: 2, Export: 2, Sharing: 2
-    const checkQ = res.body.questions.find((q: any) => q.questionId === 'q_check');
+    const checkQ = res.body.questions.find((q: { questionId: string }) => q.questionId === 'q_check');
     expect(checkQ.answered).toBe(4);
     expect(checkQ.counts).toEqual([
       { option: 'Analytics', count: 2 },
@@ -139,7 +139,7 @@ describe('Analytics & Responses API', () => {
     ]);
 
     // 4. Text analytics: 3 answered
-    const textQ = res.body.questions.find((q: any) => q.questionId === 'q_text');
+    const textQ = res.body.questions.find((q: { questionId: string }) => q.questionId === 'q_text');
     expect(textQ.answered).toBe(3);
     expect(textQ.hasMore).toBe(false);
     expect(textQ.answers).toContain('Excellent tool');

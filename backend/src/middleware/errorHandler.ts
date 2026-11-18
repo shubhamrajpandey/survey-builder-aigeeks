@@ -50,12 +50,19 @@ export function errorHandler(
   }
 
   // 4. Duplicate key error from MongoDB
-  if ((err as any).code === 11000) {
+  const isMongoDuplicate =
+    typeof err === 'object' &&
+    err !== null &&
+    'code' in err &&
+    (err as { code?: number }).code === 11000;
+
+  if (isMongoDuplicate) {
+    const mongoErr = err as { keyValue?: Record<string, unknown> };
     res.status(409).json({
       error: {
         code: 'DUPLICATE_RESOURCE',
         message: 'A resource with this key already exists',
-        details: (err as any).keyValue,
+        details: mongoErr.keyValue,
       },
     });
     return;

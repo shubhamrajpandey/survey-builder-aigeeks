@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import { validateSurveySchema, Survey } from '@survey/shared';
+import { validateSurveySchema, Survey, SurveyStatus } from '@survey/shared';
 import { SurveyModel, ISurveyDoc } from '../models/Survey.js';
 import { ResponseModel } from '../models/Response.js';
 import { NotFoundError, ValidationError } from '../utils/errors.js';
@@ -127,7 +127,7 @@ export async function updateSurvey(
 
 export async function updateSurveyStatus(
   rootId: string,
-  status: 'published' | 'closed'
+  status: SurveyStatus
 ): Promise<ISurveyDoc> {
   const survey = await SurveyModel.findOne({ rootId, isLatest: true });
   if (!survey) {

@@ -43,10 +43,16 @@ export async function requireAuth(
     };
 
     next();
-  } catch (error: any) {
+  } catch (error: unknown) {
     if (error instanceof UnauthorizedError) {
       next(error);
-    } else if (error?.name === 'JsonWebTokenError' || error?.name === 'TokenExpiredError') {
+    } else if (
+      typeof error === 'object' &&
+      error !== null &&
+      'name' in error &&
+      ((error as { name: string }).name === 'JsonWebTokenError' ||
+        (error as { name: string }).name === 'TokenExpiredError')
+    ) {
       next(new UnauthorizedError('Invalid or expired authentication token'));
     } else {
       next(error);
