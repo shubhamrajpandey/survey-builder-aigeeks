@@ -51,7 +51,7 @@ This guide provides step-by-step instructions for deploying the Dynamic Survey A
 5. In **Environment Variables**, add:
    ```env
    NODE_ENV=production
-   PORT=5000
+   PORT=5001
    MONGODB_URI=mongodb+srv://survey_admin:<PASSWORD>@cluster0.xxxx.mongodb.net/survey_app?retryWrites=true&w=majority
    JWT_SECRET=production_secret_key_at_least_32_characters_random_string
    JWT_EXPIRES_IN=12h

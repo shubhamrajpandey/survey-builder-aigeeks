@@ -137,12 +137,12 @@ cp frontend/.env.example frontend/.env
 # Build all packages (shared, backend, frontend)
 npm run build
 
-# Run all 60 automated tests across workspaces
+# Run all 61 automated tests across workspaces
 npm test
 ```
 
 ### 4. Seed Database
-Make sure MongoDB is running locally (or supply a cloud `MONGODB_URI` in `backend/.env`):
+Make sure MongoDB is running locally (or supply a cloud `MONGODB_URI` in `backend/.env`; if MongoDB is not running, the development server will automatically start an in-memory instance):
 ```bash
 # Creates admin (admin@aigeeks.io / AdminPassword123!) + "Customer Feedback" Demo Survey + 25 Sample Responses
 npm run seed
@@ -151,7 +151,7 @@ npm run seed
 ### 5. Start Development Servers
 Open two terminal tabs:
 ```bash
-# Tab 1: Start Backend API (runs on port 5000 with tsx watch)
+# Tab 1: Start Backend API (runs on port 5001 with tsx watch)
 npm run dev:backend
 
 # Tab 2: Start Frontend Application (runs on port 5173 with Vite)
