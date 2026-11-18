@@ -88,13 +88,14 @@ You should see:
 
 ---
 
-## 4. Step 4: Deploy Frontend to Vercel
+## 4. Step 4: Deploy Frontend to Vercel or Netlify
 
+### Option A: Vercel
 1. Sign in to [vercel.com](https://vercel.com) and click **Add New $\rightarrow$ Project**.
 2. Import your GitHub repository.
 3. In **Project Configuration**:
    - **Framework Preset**: `Vite`
-   - **Root Directory**: `.` (leave at root, our `vercel.json` coordinates monorepo builds)
+   - **Root Directory**: `.` (leave at root, `vercel.json` coordinates monorepo builds)
    - **Build Command**:
      ```bash
      npm run build --workspace=shared && npm run build --workspace=frontend
@@ -105,6 +106,18 @@ You should see:
    - Value: `https://<YOUR_RENDER_SUBDOMAIN>.onrender.com/api/v1`
 5. Click **Deploy**.
 6. Once deployed, note your live Vercel URL (e.g. `https://survey-builder-aigeeks.vercel.app`).
+
+### Option B: Netlify
+1. Sign in to [netlify.com](https://netlify.com) and click **Add new site $\rightarrow$ Import an existing project**.
+2. Connect your GitHub repository.
+3. Netlify automatically detects the committed `netlify.toml`:
+   - **Build Command:** `npm run build:frontend`
+   - **Publish Directory:** `frontend/dist`
+4. In **Environment Variables**, add:
+   - Key: `VITE_API_URL`
+   - Value: `https://<YOUR_RENDER_SUBDOMAIN>.onrender.com/api/v1`
+5. Click **Deploy site**.
+6. SPA routing rewrites are pre-configured in `netlify.toml` (`/* -> /index.html 200`).
 
 ---
 
