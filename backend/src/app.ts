@@ -15,17 +15,39 @@ export function createApp(): Express {
   // Security headers
   app.use(helmet());
 
-  // CORS configuration supporting comma-separated origin list or '*'
-  const corsOrigins = env.CORS_ORIGIN.includes(',')
-    ? env.CORS_ORIGIN.split(',').map((o) => o.trim())
-    : env.CORS_ORIGIN;
+  // CORS configuration supporting comma-separated list, '*', Netlify, and Vercel domains
+  const allowedOrigins = env.CORS_ORIGIN.split(',').map((o) => o.trim());
 
-  app.use(
-    cors({
-      origin: corsOrigins === '*' ? true : corsOrigins,
-      credentials: true,
-    })
-  );
+  const corsOptions: cors.CorsOptions = {
+    origin: (origin, callback) => {
+      if (!origin) {
+        return callback(null, true);
+      }
+
+      const isExplicitlyAllowed =
+        env.CORS_ORIGIN === '*' ||
+        allowedOrigins.includes('*') ||
+        allowedOrigins.includes(origin);
+
+      const isKnownCloudPlatform =
+        origin.endsWith('.netlify.app') ||
+        origin.endsWith('.vercel.app') ||
+        origin.includes('localhost') ||
+        origin.includes('127.0.0.1');
+
+      if (isExplicitlyAllowed || isKnownCloudPlatform) {
+        return callback(null, true);
+      }
+
+      callback(new Error(`Origin ${origin} not allowed by CORS`));
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'x-forwarded-for'],
+  };
+
+  app.use(cors(corsOptions));
+  app.options('*', cors(corsOptions));
 
   // Body parser with 100kb limit
   app.use(express.json({ limit: '100kb' }));
