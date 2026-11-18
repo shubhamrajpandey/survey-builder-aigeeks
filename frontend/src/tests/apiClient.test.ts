@@ -64,11 +64,12 @@ describe('apiClient', () => {
     try {
       await apiClient('/surveys');
       expect.fail('Should have thrown');
-    } catch (err: any) {
+    } catch (err: unknown) {
       expect(err).toBeInstanceOf(ApiClientError);
-      expect(err.statusCode).toBe(400);
-      expect(err.code).toBe('VALIDATION_ERROR');
-      expect(err.details).toEqual({ field: 'Field is required' });
+      const apiErr = err as ApiClientError;
+      expect(apiErr.statusCode).toBe(400);
+      expect(apiErr.code).toBe('VALIDATION_ERROR');
+      expect(apiErr.details).toEqual({ field: 'Field is required' });
     }
   });
 });

@@ -1,13 +1,13 @@
 import React from 'react';
-import { Question } from '@survey/shared';
+import { Question, AnswerValue } from '@survey/shared';
 import { Textarea } from '../ui/Textarea';
 import { RatingInput } from './RatingInput';
 
 interface QuestionRendererProps {
   question: Question;
   index: number;
-  value: any;
-  onChange: (val: any) => void;
+  value?: AnswerValue;
+  onChange: (val: AnswerValue | undefined) => void;
   error?: string;
   disabled?: boolean;
 }

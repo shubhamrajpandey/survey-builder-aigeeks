@@ -67,4 +67,26 @@ describe('SurveyBuilderPage Component', () => {
     expect(conditionCheckboxes[0]).toBeDisabled();
     expect(screen.getByText(/Requires at least one preceding question/i)).toBeInTheDocument();
   });
+
+  it('displays inline warning when reordering moves a conditional question before its parent', () => {
+    renderBuilder();
+
+    // Add a second question
+    const addRatingBtn = screen.getByRole('button', { name: /1-5 Star Rating/i });
+    fireEvent.click(addRatingBtn);
+
+    // Turn on conditional logic for Q2
+    const conditionCheckboxes = screen.getAllByRole('checkbox', {
+      name: /Show only conditionally.../i,
+    });
+    fireEvent.click(conditionCheckboxes[1]);
+
+    // Q2 now depends on Q1. Move Q2 up above Q1!
+    const moveUpButtons = screen.getAllByRole('button', { name: /Move question up/i });
+    fireEvent.click(moveUpButtons[1]);
+
+    // Now Q2 has moved to position 0, before Q1. The invalid condition warning should appear!
+    expect(screen.getByText('Invalid Condition Order')).toBeInTheDocument();
+    expect(screen.getByText(/Conditions can only depend on earlier questions/i)).toBeInTheDocument();
+  });
 });

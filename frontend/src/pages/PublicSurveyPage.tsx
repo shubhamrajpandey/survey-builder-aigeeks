@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+import { AnswersMap } from '@survey/shared';
 import { getPublicSurveyApi, submitPublicResponseApi } from '../api/public';
+import { ApiClientError } from '../api/client';
 import { SurveyForm } from '../components/survey-form/SurveyForm';
 import { Spinner } from '../components/ui/Spinner';
 import { PageTitle } from '../components/common/PageTitle';
@@ -22,7 +24,7 @@ export function PublicSurveyPage() {
     enabled: !!rootId,
   });
 
-  const handleSubmit = async (answers: Record<string, any>, honeypot?: string) => {
+  const handleSubmit = async (answers: AnswersMap, honeypot?: string) => {
     if (!rootId) return;
     setIsSubmitting(true);
     setSubmitError(null);
@@ -30,15 +32,19 @@ export function PublicSurveyPage() {
     try {
       await submitPublicResponseApi(rootId, { answers, website: honeypot });
       navigate(`/s/${rootId}/thanks`);
-    } catch (err: any) {
-      if (err.statusCode === 429) {
-        setSubmitError(
-          'Submission limit reached: You have submitted too many requests recently. Please wait a minute before submitting again.'
-        );
-      } else if (err.code === 'SPAM_DETECTED') {
-        setSubmitError('A recent duplicate response was detected. Please wait before submitting again.');
+    } catch (err: unknown) {
+      if (err instanceof ApiClientError) {
+        if (err.statusCode === 429) {
+          setSubmitError(
+            'Submission limit reached: You have submitted too many requests recently. Please wait a minute before submitting again.'
+          );
+        } else if (err.code === 'SPAM_DETECTED') {
+          setSubmitError('A recent duplicate response was detected. Please wait before submitting again.');
+        } else {
+          setSubmitError(err.message || 'Failed to submit survey. Please try again.');
+        }
       } else {
-        setSubmitError(err.message || 'Failed to submit survey. Please try again.');
+        setSubmitError('Failed to submit survey. Please try again.');
       }
       toast.error('Submission failed. Please check the errors above.');
     } finally {
@@ -56,7 +62,7 @@ export function PublicSurveyPage() {
 
   // Handle specific backend error status codes
   if (error || !data?.survey) {
-    const apiErr = error as any;
+    const apiErr = error instanceof ApiClientError ? error : null;
     const errorCode = apiErr?.code;
 
     if (errorCode === 'SURVEY_DRAFT') {

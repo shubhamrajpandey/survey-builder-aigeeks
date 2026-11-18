@@ -37,7 +37,7 @@ export async function apiClient<T>(
       ...options,
       headers,
     });
-  } catch (err: any) {
+  } catch (_err: unknown) {
     throw new ApiClientError(0, 'NETWORK_ERROR', 'Network connection failed. Please check your internet connection.');
   }
 

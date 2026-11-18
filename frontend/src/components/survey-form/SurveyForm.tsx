@@ -1,12 +1,12 @@
 import React, { useState, useMemo, useCallback } from 'react';
-import { Survey, Question, isQuestionVisible, validateResponse } from '@survey/shared';
+import { Survey, Question, isQuestionVisible, validateResponse, AnswersMap, AnswerValue } from '@survey/shared';
 import { QuestionRenderer } from './QuestionRenderer';
 import { Button } from '../ui/Button';
 import { Send, Eye, CheckCircle2 } from 'lucide-react';
 
 interface SurveyFormProps {
   survey: Survey;
-  onSubmit?: (answers: Record<string, any>, honeypot?: string) => Promise<void>;
+  onSubmit?: (answers: AnswersMap, honeypot?: string) => Promise<void>;
   isPreview?: boolean;
   isSubmitting?: boolean;
 }
@@ -17,7 +17,7 @@ export function SurveyForm({
   isPreview = false,
   isSubmitting = false,
 }: SurveyFormProps) {
-  const [answers, setAnswers] = useState<Record<string, any>>({});
+  const [answers, setAnswers] = useState<AnswersMap>({});
   const [honeypot, setHoneypot] = useState<string>('');
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -37,12 +37,17 @@ export function SurveyForm({
 
   // Handle answer change with automatic dropping of hidden questions
   const handleAnswerChange = useCallback(
-    (questionId: string, val: any) => {
+    (questionId: string, val: AnswerValue | undefined) => {
       setAnswers((prev) => {
-        const next = { ...prev, [questionId]: val };
+        const next: AnswersMap = { ...prev };
+        if (val === undefined) {
+          delete next[questionId];
+        } else {
+          next[questionId] = val;
+        }
 
         // Evaluate question visibility with new answers and drop any answers that become hidden
-        const cleaned: Record<string, any> = { ...next };
+        const cleaned: AnswersMap = { ...next };
         for (const q of survey.questions || []) {
           const visible = isQuestionVisible(q, cleaned, questionsById);
           if (!visible && cleaned[q.id] !== undefined) {

@@ -41,7 +41,7 @@ export function AdminSurveysPage() {
       queryClient.invalidateQueries({ queryKey: ['admin-surveys'] });
       toast.success(`Survey ${vars.status === 'published' ? 'published' : 'closed'} successfully`);
     },
-    onError: (err: any) => {
+    onError: (err: Error) => {
       toast.error(err.message || 'Failed to update survey status');
     },
   });
@@ -53,7 +53,7 @@ export function AdminSurveysPage() {
       toast.success('Survey deleted successfully');
       setDeleteTarget(null);
     },
-    onError: (err: any) => {
+    onError: (err: Error) => {
       toast.error(err.message || 'Failed to delete survey');
     },
   });

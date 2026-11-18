@@ -128,7 +128,7 @@ export function SurveyBuilderPage() {
       );
       navigate('/admin');
     },
-    onError: (err: any) => {
+    onError: (err: Error) => {
       toast.error(err.message || 'Failed to save survey');
     },
   });

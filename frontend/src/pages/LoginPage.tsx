@@ -31,8 +31,9 @@ export function LoginPage() {
       login(res.token, res.admin);
       toast.success('Signed in successfully');
       navigate(from, { replace: true });
-    } catch (err: any) {
-      setErrorMsg(err.message || 'Invalid email or password');
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Invalid email or password';
+      setErrorMsg(message);
     } finally {
       setIsLoading(false);
     }
