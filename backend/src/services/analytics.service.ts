@@ -57,7 +57,7 @@ export async function getSurveyAnalytics(
           type: 'single_choice',
           label: question.label,
           answered,
-          counts: (question.options || []).map((opt) => ({
+          counts: (question.options || []).map((opt: string) => ({
             option: opt,
             count: optionCounts.get(opt) || 0,
           })),
@@ -87,7 +87,7 @@ export async function getSurveyAnalytics(
           type: 'checkbox',
           label: question.label,
           answered,
-          counts: (question.options || []).map((opt) => ({
+          counts: (question.options || []).map((opt: string) => ({
             option: opt,
             count: optionCounts.get(opt) || 0,
           })),

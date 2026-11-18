@@ -3,8 +3,8 @@ services:
     name: survey-builder-api
     env: node
     plan: free
-    buildCommand: npm install && npm run build --workspace=shared && npm run build --workspace=backend
-    startCommand: node backend/dist/server.js
+    buildCommand: npm install && npm run build:backend
+    startCommand: npm start
     healthCheckPath: /health
     envVars:
       - key: NODE_ENV
