@@ -7,6 +7,14 @@ async function bootstrap() {
     await connectDB();
     console.log('✅ Connected to MongoDB');
 
+    // Automatically seed default admin & demo data if database is fresh
+    try {
+      const { seedData } = await import('./scripts/seed-data.js');
+      await seedData();
+    } catch (seedErr) {
+      console.warn('⚠️ Auto-seed skipped or failed:', seedErr);
+    }
+
     const app = createApp();
 
     const server = app.listen(env.PORT, () => {

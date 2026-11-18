@@ -7,7 +7,7 @@ import { hashPassword, hashIp } from '../utils/hash.js';
 import { Question } from '@survey/shared';
 
 export async function seedData(isAdminOnly = false): Promise<void> {
-  // 1. Seed Admin
+  // 1. Seed Admin from env
   const email = env.ADMIN_EMAIL.toLowerCase().trim();
   let admin = await Admin.findOne({ email });
 
@@ -20,6 +20,20 @@ export async function seedData(isAdminOnly = false): Promise<void> {
     console.log(`✅ Created admin user: ${email}`);
   } else {
     console.log(`ℹ️ Admin user already exists: ${email}`);
+  }
+
+  // Ensure fallback demo admin exists (admin@example.com / admin123)
+  const fallbackEmail = 'admin@example.com';
+  if (fallbackEmail !== email) {
+    const fallbackAdmin = await Admin.findOne({ email: fallbackEmail });
+    if (!fallbackAdmin) {
+      const fallbackHash = await hashPassword('admin123');
+      await Admin.create({
+        email: fallbackEmail,
+        passwordHash: fallbackHash,
+      });
+      console.log(`✅ Created fallback admin user: ${fallbackEmail}`);
+    }
   }
 
   if (isAdminOnly) {
