@@ -26,6 +26,12 @@ export const QuestionSchema = z.object({
 
 export const SurveyStatusSchema = z.enum(['draft', 'published', 'closed']);
 
+export const AnswerValueSchema = z.union([
+  z.string(),
+  z.number(),
+  z.array(z.string()),
+]);
+
 export const CreateSurveySchema = z.object({
   title: z.string().trim().min(1, 'Survey title cannot be empty').max(200, 'Survey title cannot exceed 200 characters'),
   description: z.string().trim().max(2000, 'Survey description cannot exceed 2000 characters').optional().default(''),
@@ -41,10 +47,10 @@ export const UpdateSurveySchema = z.object({
 });
 
 export const UpdateSurveyStatusSchema = z.object({
-  status: z.enum(['published', 'closed']),
+  status: SurveyStatusSchema,
 });
 
 export const SubmitResponsePayloadSchema = z.object({
-  answers: z.record(z.any()),
+  answers: z.record(AnswerValueSchema),
   website: z.string().optional(),
 });
