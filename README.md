@@ -6,9 +6,9 @@ A dynamic, full-stack survey platform built with **TypeScript**, **Node.js/Expre
 
 ## 🌐 Live URLs & Demo Credentials
 
-- **Live Application**: `https://LIVE_FRONTEND_URL.vercel.app` *(Replace with deployed Vercel URL)*
-- **Live API Endpoint**: `https://LIVE_API_URL.onrender.com/api/v1` *(Replace with deployed Render URL)*
-- **Health Check**: `https://LIVE_API_URL.onrender.com/health`
+- **Live Application**: ` https://surveyaigreeks.netlify.app/` 
+- **Live API Endpoint**: `https://survey-builder-aigeeks.onrender.com/api/v1` 
+- **Health Check**: `https://survey-builder-aigeeks.onrender.com/health`
 - **Demo Admin Credentials**:
   - **Email**: `admin@aigeeks.io`
   - **Password**: `AdminPassword123!`
